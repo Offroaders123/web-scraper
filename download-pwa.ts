@@ -26,7 +26,6 @@ async function waitForTimeout(milliseconds: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
-(async () => {
   const browser = await launch({ headless: false });
   const page = await browser.newPage();
 
@@ -83,4 +82,3 @@ async function waitForTimeout(milliseconds: number): Promise<void> {
 
   await browser.close();
   console.log('✅ Done. All files saved to:', OUTPUT_DIR);
-})();
