@@ -4,9 +4,6 @@
     "checkJs": true,
     "module": "CommonJS",
     "target": "ESNext",
-    "lib": [
-      "ESNext"
-    ],
     "isolatedModules": true,
     "noEmit": true,
     "strict": true,

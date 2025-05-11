@@ -6,6 +6,7 @@ const { URL } = require('url');
 
 const OUTPUT_DIR = 'offline-copy';
 const TARGET_URL = 'https://www.photopea.com/'; // Replace with your PWA's URL
+const RUN_BUTTON = 'div#cap > button[onclick]';
 
 /**
  * @param {string} requestUrl
@@ -71,6 +72,11 @@ async function waitForTimeout(milliseconds) {
 
   console.log(`🌐 Visiting ${TARGET_URL}...`);
   await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
+
+  await page.waitForSelector(RUN_BUTTON);
+  await page.click(RUN_BUTTON);
+  await page.reload({ waitUntil: 'networkidle2' });
+  await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
   // Optionally wait longer for dynamic requests or simulate user interaction here
   // await page.waitForTimeout(5000);
