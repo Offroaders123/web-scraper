@@ -26,59 +26,59 @@ async function waitForTimeout(milliseconds: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
-  const browser = await launch({ headless: false });
-  const page = await browser.newPage();
+const browser = await launch({ headless: false });
+const page = await browser.newPage();
 
-  // Intercept and save every response
-  await page.setRequestInterception(true);
+// Intercept and save every response
+await page.setRequestInterception(true);
 
-  page.on('request', request => {
-    // Skip data:, about:, etc.
-    if (['data', 'about'].includes(new URL(request.url()).protocol.slice(0, -1))) {
-      return request.abort();
-    }
-    request.continue();
-  });
+page.on('request', request => {
+  // Skip data:, about:, etc.
+  if (['data', 'about'].includes(new URL(request.url()).protocol.slice(0, -1))) {
+    return request.abort();
+  }
+  request.continue();
+});
 
-  page.on('response', async response => {
-    try {
-      const request = response.request();
-      const url = request.url();
+page.on('response', async response => {
+  try {
+    const request = response.request();
+    const url = request.url();
 
-      if (url.startsWith('data:')) return;
-      const host = new URL(url).host;
-      if (!/pea|photo|fonts|vecpea|gstatic/.test(host)) return;
-      console.log(url);
+    if (url.startsWith('data:')) return;
+    const host = new URL(url).host;
+    if (!/pea|photo|fonts|vecpea|gstatic/.test(host)) return;
+    console.log(url);
 
-      return;
+    return;
 
-      // // Ignore things like fonts or tracking pixels if you want
-      // if (!['document', 'stylesheet', 'script', 'image', 'xhr', 'fetch'].includes(request.resourceType())) {
-      //   return;
-      // }
+    // // Ignore things like fonts or tracking pixels if you want
+    // if (!['document', 'stylesheet', 'script', 'image', 'xhr', 'fetch'].includes(request.resourceType())) {
+    //   return;
+    // }
 
-      const buffer = await response.buffer();
-      await saveResponse(request, buffer);
-    } catch (err) {
-      console.warn(`⚠ Failed to save response: ${err instanceof Error ? err.message : err}`);
-    }
-  });
+    const buffer = await response.buffer();
+    await saveResponse(request, buffer);
+  } catch (err) {
+    console.warn(`⚠ Failed to save response: ${err instanceof Error ? err.message : err}`);
+  }
+});
 
-  console.log(`🌐 Visiting ${TARGET_URL}...`);
-  await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
+console.log(`🌐 Visiting ${TARGET_URL}...`);
+await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
 
-  await page.waitForSelector(RUN_BUTTON);
-  await page.click(RUN_BUTTON);
-  await page.reload({ waitUntil: 'networkidle2' });
-  await page.waitForSelector(AD_PANEL);
-  await page.evaluate(AD_PANEL => {
-    document.querySelector(AD_PANEL)?.remove();
-  }, AD_PANEL);
-  await page.waitForNavigation({ waitUntil: 'networkidle2' });
+await page.waitForSelector(RUN_BUTTON);
+await page.click(RUN_BUTTON);
+await page.reload({ waitUntil: 'networkidle2' });
+await page.waitForSelector(AD_PANEL);
+await page.evaluate(AD_PANEL => {
+  document.querySelector(AD_PANEL)?.remove();
+}, AD_PANEL);
+await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
-  // Optionally wait longer for dynamic requests or simulate user interaction here
-  // await page.waitForTimeout(5000);
-  await waitForTimeout(5000);
+// Optionally wait longer for dynamic requests or simulate user interaction here
+// await page.waitForTimeout(5000);
+await waitForTimeout(5000);
 
-  await browser.close();
-  console.log('✅ Done. All files saved to:', OUTPUT_DIR);
+await browser.close();
+console.log('✅ Done. All files saved to:', OUTPUT_DIR);
