@@ -9,33 +9,20 @@ const TARGET_URL = 'https://www.photopea.com/'; // Replace with your PWA's URL
 const RUN_BUTTON = 'div#cap > button[onclick]';
 const AD_PANEL = '.flexrow.app > div:nth-child(2)';
 
-/**
- * @param {string} requestUrl
- * @returns {string}
- */
-function urlToFilePath(requestUrl) {
+function urlToFilePath(requestUrl: string): string {
   const { hostname, pathname } = new URL(requestUrl);
   const cleanPath = pathname.endsWith('/') ? pathname + 'index.html' : pathname;
   return path.join(OUTPUT_DIR, hostname, decodeURIComponent(cleanPath));
 }
 
-/**
- * @param {puppeteer.HTTPRequest} request
- * @param {Buffer<ArrayBufferLike>} responseBuffer
- * @returns {Promise<void>}
- */
-async function saveResponse(request, responseBuffer) {
+async function saveResponse(request: puppeteer.HTTPRequest, responseBuffer: Buffer<ArrayBufferLike>): Promise<void> {
   const filePath = urlToFilePath(request.url());
   await mkdirp(path.dirname(filePath));
   fs.writeFileSync(filePath, responseBuffer);
   console.log(`✔ Saved: ${request.url()} → ${filePath}`);
 }
 
-/**
- * @param {number} milliseconds
- * @returns {Promise<void>}
- */
-async function waitForTimeout(milliseconds) {
+async function waitForTimeout(milliseconds: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
