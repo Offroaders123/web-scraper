@@ -1,8 +1,8 @@
 import { type HTTPRequest, launch } from 'puppeteer';
-import { writeFileSync } from 'fs';
-import { join, dirname } from 'path';
+import { writeFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 import { mkdirp } from 'mkdirp';
-import { URL } from 'url';
+import { URL } from 'node:url';
 
 const OUTPUT_DIR = 'offline-copy';
 const TARGET_URL = 'https://www.photopea.com/'; // Replace with your PWA's URL
