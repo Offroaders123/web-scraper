@@ -5,7 +5,7 @@ const { mkdirp } = require('mkdirp');
 const { URL } = require('url');
 
 const OUTPUT_DIR = 'offline-copy';
-const TARGET_URL = 'https://example.com'; // Replace with your PWA's URL
+const TARGET_URL = 'https://www.photopea.com/'; // Replace with your PWA's URL
 
 /**
  * @param {string} requestUrl
@@ -38,7 +38,7 @@ async function waitForTimeout(milliseconds) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
   // Intercept and save every response
