@@ -1,6 +1,6 @@
-import * as puppeteer from 'puppeteer';
-import * as fs from 'fs';
-import * as path from 'path';
+import { type HTTPRequest, launch } from 'puppeteer';
+import { writeFileSync } from 'fs';
+import { join, dirname } from 'path';
 import { mkdirp } from 'mkdirp';
 import { URL } from 'url';
 
@@ -12,13 +12,13 @@ const AD_PANEL = '.flexrow.app > div:nth-child(2)';
 function urlToFilePath(requestUrl: string): string {
   const { hostname, pathname } = new URL(requestUrl);
   const cleanPath = pathname.endsWith('/') ? pathname + 'index.html' : pathname;
-  return path.join(OUTPUT_DIR, hostname, decodeURIComponent(cleanPath));
+  return join(OUTPUT_DIR, hostname, decodeURIComponent(cleanPath));
 }
 
-async function saveResponse(request: puppeteer.HTTPRequest, responseBuffer: Buffer<ArrayBufferLike>): Promise<void> {
+async function saveResponse(request: HTTPRequest, responseBuffer: Buffer<ArrayBufferLike>): Promise<void> {
   const filePath = urlToFilePath(request.url());
-  await mkdirp(path.dirname(filePath));
-  fs.writeFileSync(filePath, responseBuffer);
+  await mkdirp(dirname(filePath));
+  writeFileSync(filePath, responseBuffer);
   console.log(`✔ Saved: ${request.url()} → ${filePath}`);
 }
 
@@ -27,7 +27,7 @@ async function waitForTimeout(milliseconds: number): Promise<void> {
 }
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await launch({ headless: false });
   const page = await browser.newPage();
 
   // Intercept and save every response
