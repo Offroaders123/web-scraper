@@ -1,8 +1,8 @@
-const puppeteer = require('puppeteer');
-const fs = require('fs');
-const path = require('path');
-const { mkdirp } = require('mkdirp');
-const { URL } = require('url');
+import * as puppeteer from 'puppeteer';
+import * as fs from 'fs';
+import * as path from 'path';
+import { mkdirp } from 'mkdirp';
+import { URL } from 'url';
 
 const OUTPUT_DIR = 'offline-copy';
 const TARGET_URL = 'https://www.photopea.com/'; // Replace with your PWA's URL

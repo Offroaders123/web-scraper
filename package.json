@@ -2,7 +2,7 @@
   "name": "web-scraper",
   "private": true,
   "version": "0.1.0",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "mkdirp": "^3.0.1",
     "puppeteer": "^24.8.2"
