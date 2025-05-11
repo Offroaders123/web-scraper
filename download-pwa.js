@@ -59,7 +59,12 @@ async function waitForTimeout(milliseconds) {
       const request = response.request();
       const url = request.url();
 
-      // if (!url.includes('photopea')) return;
+      if (url.startsWith('data:')) return;
+      const host = new URL(url).host;
+      if (!/pea|photo|fonts|vecpea|gstatic/.test(host)) return;
+      console.log(url);
+
+      return;
 
       // // Ignore things like fonts or tracking pixels if you want
       // if (!['document', 'stylesheet', 'script', 'image', 'xhr', 'fetch'].includes(request.resourceType())) {
