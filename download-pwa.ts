@@ -50,7 +50,7 @@ page.on('response', async response => {
     if (!/pea|photo|fonts|vecpea|gstatic/.test(host)) return;
     console.log(url);
 
-    return;
+    // return;
 
     // // Ignore things like fonts or tracking pixels if you want
     // if (!['document', 'stylesheet', 'script', 'image', 'xhr', 'fetch'].includes(request.resourceType())) {
